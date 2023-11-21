@@ -3,6 +3,18 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import React, { useState, useEffect } from 'react';
 
+function capitalize(str) {
+  return (str || ' ').charAt(0).toUpperCase() + str.slice(1);
+}
+
+function unit_name(unit) {
+  let units_map = {
+    'ea': 'each'
+  }
+
+  return unit in units_map ? units_map[unit] : unit;
+}
+
 function ProductList() {
   const [products, setProducts] = useState([]);
 
@@ -27,17 +39,25 @@ function ProductList() {
           <table class="table">
           <thead>
             <tr>
+              <th scope="col">Retailer</th>
               <th scope="col">Name</th>
+              <th scope="col">Category</th>
               <th scope="col">Price</th>
+              <th scope="col">Unit</th>
               <th scope="col">Image</th>
+              <th scope="col">Last update</th>
             </tr>
           </thead>
           <tbody>
             {products.map(p => (
                 <tr key={p.id}>
-                <th scope="row"><a href={p.url}>{p.name}</a></th>
-                <td>${p.price}</td>
-                <td><img src={p.image} width="100" height="100" /></td>
+                  <td scope="row">{capitalize(p.retailer)}</td>
+                  <th><a href={p.url}>{p.name}</a></th>
+                  <td>{p.categories}</td>
+                  <td>${p.price}</td>
+                  <td>{unit_name(p.unit)}</td>
+                  <td><img src={p.image} width="100" height="100" /></td>
+                  <td>{p.created_time}</td>
               </tr>
             ))}
           </tbody>
