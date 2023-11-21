@@ -36,7 +36,7 @@ function ProductList() {
             {products.map(p => (
                 <tr key={p.id}>
                 <th scope="row"><a href={p.url}>{p.name}</a></th>
-                <td>{p.price}</td>
+                <td>${p.price}</td>
                 <td><img src={p.image} width="100" height="100" /></td>
               </tr>
             ))}
