@@ -1,6 +1,5 @@
 import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+import Table from 'react-bootstrap/Table';
 import React, { useState, useEffect } from 'react';
 
 function capitalize(str) {
@@ -24,8 +23,14 @@ function ProductList() {
       const response = await fetch(
         'http://127.0.0.1:8000/products/?format=json&page_size=1000',
       );
-      let json_res = await response.json()
-      setProducts(json_res.results);
+      let products = (await response.json()).results
+      let al_p = products.filter(a => a.retailer == 'alpremium').slice(0, 10)
+      let no_p = products.filter(a => a.retailer == 'nofrills').slice(0, 10)
+      products =  al_p.concat(no_p).toSorted((a, b) => a.name > b.name)
+      products.forEach(p => {
+        p.created_time = p.created_time.slice(0, 10)
+      });
+      setProducts(products);
     }
 
     // call the function
@@ -36,7 +41,7 @@ function ProductList() {
     <Container fluid>
       {
         (products.length && (
-          <table class="table">
+          <Table striped bordered hover>
           <thead>
             <tr>
               <th scope="col">Retailer</th>
@@ -61,7 +66,7 @@ function ProductList() {
               </tr>
             ))}
           </tbody>
-        </table>
+        </Table>
         ))
           || 'Data is loading'}
     </Container>
