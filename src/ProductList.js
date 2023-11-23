@@ -51,7 +51,9 @@ function ProductList() {
 
   return (
     <div style={{fontSize: '30px'}}>
-      <label htmlFor='filter'>Filter: </label><input id='filter' onChange={handleFilter} value={filter} type="search" />
+      <div style={{textAlign: 'left', padding: 20}}>
+        <label htmlFor='filter'>Filter:</label>&nbsp;<input id='filter' onChange={handleFilter} value={filter} type="search" />
+      </div>
       <Container fluid>
         {
           (filteredProducts.length && (
