@@ -1,6 +1,7 @@
 import Container from 'react-bootstrap/Container';
 import Table from 'react-bootstrap/Table';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+// import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 
 function capitalize(str) {
   return (str || ' ').charAt(0).toUpperCase() + str.slice(1);
@@ -19,6 +20,8 @@ function ProductList() {
   const [products, setProducts] = useState([]);
   const [filter, setFilter] = useState('');
 
+  // const ref = useRef();
+
   useEffect(() => {
     // declare the data fetching function
     const fetchData = async () => {
@@ -30,9 +33,11 @@ function ProductList() {
       // let al_p = products.filter(a => a.retailer == 'alpremium').slice(0, 10)
       // let no_p = products.filter(a => a.retailer == 'nofrills').slice(0, 10)
       // products =  al_p.concat(no_p).toSorted((a, b) => a.name > b.name)
+      products =  products.toSorted((a, b) => a.name > b.name)
       
       products.forEach(p => {
-        p.created_time = p.created_time.slice(0, 10)
+        p.retailer = capitalize(p.retailer);
+        p.created_time = p.created_time.slice(0, 10);
       });
       setProducts(products);
     }
@@ -43,11 +48,16 @@ function ProductList() {
 
   // Handle filter change
   function handleFilter(e) {
-    setFilter(e.target.value);
+    setFilter(e.target.value.toLowerCase());
   }
 
   // Sort and filter products
   let filteredProducts = filter && products.filter(p => p.name.toLowerCase().includes(filter)) || products;
+
+  let tableOptions = {
+    defaultSortName: 'name',
+    defaultSortOrder: 'asc'
+  };
 
   return (
     <div style={{fontSize: '30px'}}>
@@ -57,6 +67,15 @@ function ProductList() {
       <Container fluid>
         {
           (filteredProducts.length && (
+
+            // <BootstrapTable data={filteredProducts} options={tableOptions}>
+            //   <TableHeaderColumn dataField='id' isKey dataSort>ID</TableHeaderColumn>
+            //   <TableHeaderColumn dataField='retailer' dataSort>Retailer</TableHeaderColumn>
+            //   <TableHeaderColumn dataField='name' dataSort>Name</TableHeaderColumn>
+            // </BootstrapTable>
+
+
+
             <Table striped bordered hover>
             <thead>
               <tr>
@@ -82,7 +101,7 @@ function ProductList() {
                 </tr>
               ))}
             </tbody>
-          </Table>
+            </Table>
           ))
             || 'No data'}
       </Container>
